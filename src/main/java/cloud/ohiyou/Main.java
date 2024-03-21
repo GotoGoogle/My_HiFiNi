@@ -22,9 +22,9 @@ import java.util.regex.Pattern;
 
 public class Main {
     private static final String COOKIE = System.getenv("COOKIE");
-    //    private static final String COOKIE = "bbs_sid=3q22tlil9nsnlh878ajigcdu49; bbs_token=vTOaYxxcCo3L24s_2FFwbDXnDY50kEhyirM7Zs1bvh_2FeQlNq_2B_2FQ2kjlY00b0IOKYhOUaQ3oi0GidfRoJgcnGaFFCzC5NR6LhoT";
+//        private static final String COOKIE = "bbs_sid=3q22tlil9nsnlh878ajigcdu49; bbs_token=vTOaYxxcCo3L24s_2FFwbDXnDY50kEhyirM7Zs1bvh_2FeQlNq_2B_2FQ2kjlY00b0IOKYhOUaQ3oi0GidfRoJgcnGaFFCzC5NR6LhoT";
     private static final String DINGTALK_WEBHOOK = System.getenv("DINGTALK_WEBHOOK"); // 钉钉机器人 access_token 的值
-    private static final String WXWork_WEBHOOK = System.getenv("WXWork_WEBHOOK"); // 企业微信机器人 key 的值
+    private static final String WXWORK_WEBHOOK = System.getenv("WXWORK_WEBHOOK"); // 企业微信机器人 key 的值
     private static final String SERVER_CHAN_KEY = System.getenv("SERVER_CHAN");
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -52,7 +52,7 @@ public class Main {
             // 推送
             publishWechat(SERVER_CHAN_KEY, signResultVO, (endTime - startTime));
             DingTalkUtils.pushBotMessage(DINGTALK_WEBHOOK, signResultVO.getMessage(), "", "markdown"); // 推送钉钉机器人
-            WeChatWorkUtils.pushBotMessage(WXWork_WEBHOOK, signResultVO.getMessage(), "markdown");
+            WeChatWorkUtils.pushBotMessage(WXWORK_WEBHOOK, signResultVO.getMessage(), "markdown");
         } catch (Exception e) {
             e.printStackTrace(); // 或者使用日志框架记录异常
         } finally {
@@ -66,11 +66,11 @@ public class Main {
         // 获取Sign
         String sign = getSignKey(cookie);
         // 获取加密参数
-        String dynamicKey = HiFiNiEncryptUtil.generateDynamicKey();
-        String encryptedSign = HiFiNiEncryptUtil.simpleEncrypt(sign, dynamicKey);
+//        String dynamicKey = HiFiNiEncryptUtil.generateDynamicKey();
+//        String encryptedSign = HiFiNiEncryptUtil.simpleEncrypt(sign, dynamicKey);
 
         RequestBody formBody = new FormBody.Builder()
-                .add("sign", encryptedSign)
+                .add("sign", sign)
                 .build();
         // 发送签到请求
         Request request = new Request.Builder()
@@ -87,7 +87,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(encryptedSign);
+        System.out.println();
         return null;
     }
 
